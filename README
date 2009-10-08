@@ -1,0 +1,78 @@
+Easypg
+======
+
+This plugin overrides db:create smoothing the development database setup process
+when postgres is used with database specific users rather than the superuser.
+
+Warning: the plugin makes db:create's behaviour more aggressive - an existing
+database or user will be nuked if they exist already. Be careful if you value the
+content stored in your development database!
+
+Example
+=======
+
+in rails project:
+> ruby script/plugin install http://svn/repos/rails_plugins/easypg
+
+then when another dev comes along to the rails project afresh:
+> svn co http://svn/repos/awesomest_rails_project/trunk awesomest_rails_project
+> cd awesomest_rails_project
+> rake db:setup
+
+Doesn't bork, but works (as behind the scenes postgres permissions and user set up are handled in a way that works for our setup)
+(same is true of db:create, db:create:all, db:reset)
+
+behind the scenes:
+databases.rake db:create overriden:
+- bork if adapter not postgres (as that's the point) or not development environment
+- otherwise use the passed config but using our SQL template
+
+
+Future
+======
+The plugin currently contains the override rake task plugin. It may be more
+appropriate for it to install this separately as part of the install script.
+
+The default database.yml refers to only one user. Our script will probably fail using this approach as the user may be associated
+with another database when the script tries to drop them.
+
+
+Copyright (c) 2009 Rahim Packir Saibo, AHC, under the MIT license
+
+
+
+
+
+Override RakeTask
+=================
+
+OverrideRakeTask plugin by Eugene Bolshakov, eugene.bolshakov@gmail.com, http://www.taknado.com
+
+This plugin is based on the Matthew Bass's idea described here:
+http://matthewbass.com/2007/03/07/overriding-existing-rake-tasks/
+
+The installation script is based on the one found in the app_config plugin
+by Daniel Owsianski, http://jarmark.org/projects/app-config/
+
+When using rake with rails it loads the task in the following order:
+
+1. Default rails tasks (like db:migrate)
+2. The tasks in your app's lib/tasks directory
+3. The tasks in your vendor/plugins directory
+
+This plugin will allow to override rake tasks that were defined earlier. It means that 
+you'll be able to override default rails tasks with lib/tasks & plugins tasks and 
+override the taksks in lib/tasks with the tasks defined in plugins.
+
+In order to override a task you need to define it as usual, but using "override_task" 
+method instead of "task":
+
+namespace :db do
+	override_task :migrate do
+		...
+	end
+end
+
+In order to make this work the plugin should be loaded before the tasks and the install script
+supplied with the plugin adds a line to load itself to the Rakefile. If it won't be able to 
+modify your Rakefile, it will let you know and you'll have to modify it manually.
