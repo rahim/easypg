@@ -3,7 +3,7 @@ Easypg
 
 Not to be confused with *that* [EasyPG](http://www.easypg.org/)
 
-This rails plugin overrides rake db:create, db:create:all & db:drop smoothing the development database
+This rails plugin overrides rake db:create, db:create:all smoothing the development database
 setup process when postgres is used with database specific users rather than a generic superuser.
 
 Warning: the plugin makes db:create's behaviour more aggressive - dropping the existing
