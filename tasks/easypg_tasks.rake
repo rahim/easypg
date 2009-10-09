@@ -1,6 +1,5 @@
 namespace :db do
   override_task :create => :load_config do
-    puts "db:create overriden!"
     easypg_create_database(ActiveRecord::Base.configurations[RAILS_ENV])
   end
   
