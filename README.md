@@ -9,37 +9,44 @@ database or user if they exist already. Be careful if you value the content stor
 your development database!
 
 Example
-=======
+-------
 
 in rails project:
-> ruby script/plugin install http://github.com/rahim/easypg.git/
+
+    $ ruby script/plugin install http://github.com/rahim/easypg.git/
 
 then when another dev comes along to the rails project afresh:
-> svn co http://svn/repos/awesomest_rails_project/trunk awesomest_rails_project
-> cd awesomest_rails_project
-> rake db:setup
 
-Doesn't bork, but works (as behind the scenes postgres permissions and user set up are handled in a way that works for our setup)
+    $ svn co http://svn/repos/awesomest_rails_project/trunk awesomest_rails_project
+    $ cd awesomest_rails_project
+    $ rake db:setup
+
+this should now work without any manual database administration to set up users/permissions etc
 (same is true of db:create, db:create:all, db:reset)
 
-behind the scenes:
-databases.rake db:create overriden:
-- bork if adapter not postgres (as that's the point) or not development environment
-- otherwise use the passed config but using our SQL template
 
+Known issues
+------------
+
+* postgrer-pr has a known issue with rails 2.3.x versions, see http://github.com/mneumann/postgres-pr/issues#issue/1
+  the workaround for this may need to be loaded in the rake environment (not just rails init)
+  for tasks to function correctly
+* db:reset fails with an auth error if the database user doens't yet exist 
+* The default database.yml refers to only one user. Our script will probably fail using this
+  approach as the user may be associated with another database when the script tries to drop them.
 
 Future
-======
-The plugin currently contains the override rake task plugin. It may be more
-appropriate for it to install this separately as part of the install script.
+------
 
-The default database.yml refers to only one user. Our script will probably fail using this approach as the user may be associated
-with another database when the script tries to drop them.
-
-
-Copyright (c) 2009 Rahim Packir Saibo, AHC, under the MIT license
+* override db:drop to avoid the permissions issue described above
+* The plugin currently contains the override rake task plugin. It may be more
+  appropriate for it to install this separately as part of the install script.
 
 
+Copyright (c) 2009 Rahim Packir Saibo, under the MIT license
+
+
+---
 
 Override RakeTask
 =================
@@ -65,11 +72,11 @@ override the taksks in lib/tasks with the tasks defined in plugins.
 In order to override a task you need to define it as usual, but using "override_task" 
 method instead of "task":
 
-namespace :db do
-	override_task :migrate do
-		...
-	end
-end
+    namespace :db do
+      override_task :migrate do
+        ...
+      end
+    end
 
 In order to make this work the plugin should be loaded before the tasks and the install script
 supplied with the plugin adds a line to load itself to the Rakefile. If it won't be able to 
