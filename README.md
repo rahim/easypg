@@ -45,6 +45,8 @@ Future
 * override db:drop to avoid the permissions issue described above
 * The plugin currently contains the override rake task plugin. It may be more
   appropriate for it to install this separately as part of the install script.
+* installing a plugin just to clean up database handling feels invasive, a gem that adds some 
+  sake tasks to work with the rails' tasks might be a cleaner approach
 
 
 Copyright (c) 2009 Rahim Packir Saibo, under the MIT license
