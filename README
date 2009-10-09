@@ -1,18 +1,18 @@
 Easypg
 ======
 
-This plugin overrides db:create smoothing the development database setup process
-when postgres is used with database specific users rather than the superuser.
+This plugin overrides db:create, db:create:all & db:drop smoothing the development database
+setup process when postgres is used with database specific users rather than a generic superuser.
 
-Warning: the plugin makes db:create's behaviour more aggressive - an existing
-database or user will be nuked if they exist already. Be careful if you value the
-content stored in your development database!
+Warning: the plugin makes db:create's behaviour more aggressive - dropping the existing
+database or user if they exist already. Be careful if you value the content stored in
+your development database!
 
 Example
 =======
 
 in rails project:
-> ruby script/plugin install http://svn/repos/rails_plugins/easypg
+> ruby script/plugin install http://github.com/rahim/easypg.git/
 
 then when another dev comes along to the rails project afresh:
 > svn co http://svn/repos/awesomest_rails_project/trunk awesomest_rails_project
@@ -38,8 +38,6 @@ with another database when the script tries to drop them.
 
 
 Copyright (c) 2009 Rahim Packir Saibo, AHC, under the MIT license
-
-
 
 
 
