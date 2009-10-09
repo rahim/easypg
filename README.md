@@ -1,7 +1,9 @@
 Easypg
 ======
 
-This plugin overrides db:create, db:create:all & db:drop smoothing the development database
+Not to be confused with *that* [EasyPG](http://www.easypg.org/)
+
+This rails plugin overrides rake db:create, db:create:all & db:drop smoothing the development database
 setup process when postgres is used with database specific users rather than a generic superuser.
 
 Warning: the plugin makes db:create's behaviour more aggressive - dropping the existing
@@ -28,12 +30,14 @@ this should now work without any manual database administration to set up users/
 Known issues
 ------------
 
-* postgrer-pr has a known issue with rails 2.3.x versions, see http://github.com/mneumann/postgres-pr/issues#issue/1
+* postgres-pr has a known issue with rails 2.3.x versions, see http://github.com/mneumann/postgres-pr/issues#issue/1
   the workaround for this may need to be loaded in the rake environment (not just rails init)
   for tasks to function correctly
 * db:reset fails with an auth error if the database user doens't yet exist 
 * The default database.yml refers to only one user. Our script will probably fail using this
   approach as the user may be associated with another database when the script tries to drop them.
+* There's currently no uninstall script which means the plugin leaves behind a stray reference to
+  override_rake_task in the Rakefile when it's uninstalled
 
 Future
 ------
