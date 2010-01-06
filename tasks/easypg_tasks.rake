@@ -1,5 +1,6 @@
 namespace :db do
   override_task :create => :load_config do
+    puts "db:create overriden!"
     easypg_create_database(ActiveRecord::Base.configurations[RAILS_ENV])
   end
   
@@ -26,7 +27,16 @@ namespace :db do
     sql.gsub!("%USER%", user)
     sql.gsub!("%DATABASE%", database)
     sql.gsub!("%PASSWORD%", password)
-    sh "echo \"#{sql}\" | psql -U postgres #{'-h 127.0.0.1' if RUBY_PLATFORM.include? "cygwin"}"
+    # sh "echo \"#{sql}\" | psql -U postgres #{'-h 127.0.0.1' if RUBY_PLATFORM.include? "cygwin"}"
+    
+    cmd = "|psql -U postgres #{'-h 127.0.0.1' if RUBY_PLATFORM.include? "cygwin"}"
+    open(cmd, 'w+') do |psql|
+      psql.write(sql)
+      psql.close_write
+      psql.read.split("\n").each do |l|
+        puts "[psql] #{l}"
+      end
+    end
   end
   
   namespace :create do
