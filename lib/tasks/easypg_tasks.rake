@@ -19,7 +19,7 @@ end
 namespace :db do
   override_task :create => :load_config do
     puts "db:create overriden!"
-    easypg_create_database(ActiveRecord::Base.configurations[RAILS_ENV])
+    easypg_create_database(ActiveRecord::Base.configurations[::Rails.env])
   end
   
   # ideally we'd like to refer to reuse the original create_database where appropriate
@@ -28,7 +28,7 @@ namespace :db do
   # (and the results scoped)
   
   def easypg_create_database(config)
-    if config['adapter'] == 'postgresql' and not RAILS_ENV =~ /production/ 
+    if config['adapter'] == 'postgresql' and not ::Rails.env =~ /production/ 
       postgres_setup(config['username'], config['database'], config['password'])
     else
       create_database(config)
