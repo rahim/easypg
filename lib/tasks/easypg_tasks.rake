@@ -15,6 +15,25 @@ def override_task(args, &block)
   task(args, &block)
 end
 
+def pg_command
+    #UGLY. Find better way of doing this.       
+    cmd = `psql -U postgres #{'-h 127.0.0.1' if RUBY_PLATFORM.include? "cygwin"}`
+    begin
+            open(cmd, 'w+') do |psql| end
+    rescue
+        puts 'postgres user not found - trying linux user'
+        cmd = "|sudo -u postgres psql #{'-h 127.0.0.1' if RUBY_PLATFORM.include? "cygwin"}"
+        begin
+          open(cmd, 'w+') do |psql| end
+        rescue
+          raise "Can't find postgres user. Create database manually"
+        end
+    end
+
+   cmd
+end
+
+
 
 namespace :db do
   override_task :create => :load_config do
@@ -47,8 +66,8 @@ namespace :db do
     sql.gsub!("%PASSWORD%", password)
     # sh "echo \"#{sql}\" | psql -U postgres #{'-h 127.0.0.1' if RUBY_PLATFORM.include? "cygwin"}"
     
-    cmd = "|psql -U postgres #{'-h 127.0.0.1' if RUBY_PLATFORM.include? "cygwin"}"
-    open(cmd, 'w+') do |psql|
+    
+    open(pg_command, 'w+') do |psql|
       psql.write(sql)
       psql.close_write
       psql.read.split("\n").each do |l|
