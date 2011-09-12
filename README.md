@@ -15,7 +15,7 @@ Example
 
 in rails project:
 
-    $ ruby script/plugin install http://github.com/rahim/easypg.git/
+    $ ruby rails install http://github.com/rahim/easypg.git
 
 then when another dev comes along to the rails project afresh:
 
