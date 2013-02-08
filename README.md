@@ -1,7 +1,7 @@
 Easypg
 ======
 
-** Warning: this project hasn't been updated or tested since rails 2.3.x - you're mileage may vary! **
+**Warning: this project hasn't been updated or tested since rails 2.3.x - your mileage may vary!**
 
 Not to be confused with *that* [EasyPG](http://www.easypg.org/)
 
