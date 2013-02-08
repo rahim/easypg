@@ -1,6 +1,8 @@
 Easypg
 ======
 
+** Warning: this project hasn't been updated or tested since rails 2.3.x - you're mileage may vary! **
+
 Not to be confused with *that* [EasyPG](http://www.easypg.org/)
 
 This rails plugin overrides rake db:create, db:create:all smoothing the development database
